@@ -1,5 +1,5 @@
 <template>
-    <div class="filter">        
+    <div class="filter">
         <ul class="listCountries">
             <li class="countries" @click="selectCountries" data-code="es" data-countriname="España">España(ES)</li>
             <li class="countries" @click="selectCountries" data-code="br" data-countriname="Brasil">Brasil (BR)</li>
@@ -7,23 +7,21 @@
             <li class="countries" @click="selectCountries" data-code="mx" data-countriname="México">México (MX)</li>
             <li class="countries" @click="selectCountries" data-code="us" data-countriname="Estados Unidos">Estados
                 Unidos (US)</li>
-            <li class="countries active" @click="selectCountries" data-code="es,br,ca,mx,us"
+            <li class="countries" @click="selectCountries" data-code="es,br,ca,mx,us"
                 data-countriname="España,Brasil,Canadá,México,Estados Unidos">Todos los paises</li>
         </ul>
     </div>
-    <h2 class="titleCountrie">Personas que podrias conocer en: {{ contrieName}}</h2>
+    <h2 class="titleCountrie" v-if="contrieName">Personas que podrias conocer en: {{ contrieName }}</h2>
 </template>
 
 <script setup>
 //Importaciones
 import { ref } from 'vue';
-import { useCountrie } from '../composables/useCountrie';
 
 //Declaracion de variables dinamicas
 const countrie = ref('')
-const contrieName = ref('España,Brasil,Canadá,México,Estados Unidos')
-//Declaracion de la funcion getCode que viene del composable useCountrie
-const { getCode } = useCountrie()
+const contrieName = ref('')
+const emit = defineEmits(['countrieCode'])
 
 //Metodo para obtener el codigo del pais y activar las clase active para el elemento seleccionado
 const selectCountries = (e) => {
@@ -37,13 +35,7 @@ const selectCountries = (e) => {
     selected.classList.add('active');
     countrie.value = countrieCode;
     contrieName.value = e.target.dataset.countriname
-    getCode(countrie.value)
-
+    emit('countrieCode', countrie.value);
 }
-
-//     persons.value = await getPersons(countrie.value)    
-//     //console.log(JSON.parse(JSON.stringify(persons.value)))
-// }
-// );
 
 </script>
